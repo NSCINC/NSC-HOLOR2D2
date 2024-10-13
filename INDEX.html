@@ -82,7 +82,7 @@
         #input-container button:hover {
             background: #18a748;
         }
-        #star-btn, #id-check-btn, #slot-connection-btn {
+        button#star-btn, button#id-check-btn, button#slot-connection-btn {
             padding: 12px;
             border: none;
             border-radius: 5px;
@@ -99,18 +99,18 @@
         <h1>HOLOR2D2 - AI Chat</h1>
 
         <!-- Single Action Button -->
-        <button id="star-btn" onclick="starAction()">Star</button>
+        <button id="star-btn" aria-label="Star action" onclick="starAction()">Star</button>
 
         <!-- ID Check Button -->
-        <button id="id-check-btn" onclick="checkID()">ID Check</button>
+        <button id="id-check-btn" aria-label="ID Check" onclick="checkID()">ID Check</button>
 
         <!-- Slot Connection Button -->
-        <button id="slot-connection-btn" onclick="connectSlot()">Connect to Slot</button>
+        <button id="slot-connection-btn" aria-label="Connect to Slot" onclick="connectSlot()">Connect to Slot</button>
 
         <div id="messages"></div>
         <div id="input-container">
             <input type="text" id="user-input" placeholder="Type your message..." autocomplete="off">
-            <button onclick="sendMessage()">Send</button>
+            <button id="send-button" onclick="sendMessage()">Send</button>
         </div>
     </div>
 
@@ -132,29 +132,21 @@
             const userMessage = createMessageElement('user', userInput);
             messageContainer.appendChild(userMessage);
 
-            try {
-                const botResponse = await getBotResponse(userInput, userId);
-                const botMessage = createMessageElement('bot', botResponse);
-                messageContainer.appendChild(botMessage);
-            } catch (error) {
-                const botMessage = createMessageElement('bot', 'An error occurred while processing your request.');
-                messageContainer.appendChild(botMessage);
-            }
+            const botResponse = await getBotResponse(userInput, userId);
+            const botMessage = createMessageElement('bot', botResponse);
+            messageContainer.appendChild(botMessage);
 
             document.getElementById('user-input').value = '';
             messageContainer.scrollTop = messageContainer.scrollHeight; // Auto-scroll to the latest message
         }
 
         async function getBotResponse(userInput, userId) {
-            if (checkSubscription(userId)) {
-                return `Welcome back, subscriber! You said: ${userInput}`;
-            } else {
-                return `Hello! You are not a subscriber. You said: ${userInput}`;
-            }
+            return checkSubscription(userId)
+                ? `Welcome back, subscriber! You said: ${userInput}`
+                : `Hello! You are not a subscriber. You said: ${userInput}`;
         }
 
         function checkSubscription(userId) {
-            // Check if the user ID exists in the user database
             return userDatabase[userId] === true;
         }
 
