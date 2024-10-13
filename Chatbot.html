@@ -128,14 +128,14 @@
 </head>
 <body>
     <div id="chat-container">
-        <h1>R2D2 - AI Chat</h1>
+        <h1>R2D2</h1>
 
         <div id="messages"></div>
         <div id="input-container">
             <input type="text" id="user-input" placeholder="Type your ID..." autocomplete="off">
             <button onclick="processID()">Go</button>
         </div>
-        <button class="sign-in-button" onclick="requestPayment()">Sign In</button>
+        <button class="sign-in-button" onclick="redirectToPayment()">Sign In</button>
     </div>
 
     <script type="module">
@@ -147,16 +147,13 @@
             const userMessage = createMessageElement('user', userInput);
             messageContainer.appendChild(userMessage);
 
-            const botMessage = createMessageElement('bot', `ID ${userInput} received! Here are your configuration instructions:`);
+            // Customize the bot response based on the user's ID
+            const botMessage = createMessageElement('bot', `ID ${userInput} received!`);
             messageContainer.appendChild(botMessage);
-            
-            // Provide configuration instructions
-            const instructionsMessage = createMessageElement('bot', `
-                1. Please select the cloud configuration you wish to apply.
-                2. Click on the corresponding button below to proceed with your configuration.
-                3. After configuration, click 'Sign In' to proceed to payment.
-            `);
-            messageContainer.appendChild(instructionsMessage);
+
+            // Ask the user a question based on their ID
+            const questionMessage = createMessageElement('bot', `What configuration would you like to apply for ID ${userInput}?`);
+            messageContainer.appendChild(questionMessage);
 
             showConfigurationOptions(messageContainer, userInput); // Pass the ID to show options
             messageContainer.scrollTop = messageContainer.scrollHeight; // Auto-scroll to the latest message
@@ -186,7 +183,7 @@
             messageContainer.scrollTop = messageContainer.scrollHeight; // Auto-scroll to the latest message
         }
 
-        function requestPayment() {
+        function redirectToPayment() {
             const messageContainer = document.getElementById('messages');
             const botMessage = createMessageElement('bot', "Redirecting to the payment page...");
             messageContainer.appendChild(botMessage);
