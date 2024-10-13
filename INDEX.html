@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="ICON.JPEG" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOLOR2D2 Chat</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #121212; /* Dark Spotify-like theme */
+            color: #fff;
+        }
+        #chat-container {
+            width: 90%;
+            max-width: 700px;
+            padding: 30px;
+            background: #1DB954; /* Spotify green */
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 90vh;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2em;
+            color: #fff; /* Title color white */
+            margin-bottom: 20px;
+        }
+        #messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            border: 1px solid #333;
+            border-radius: 10px;
+            background-color: #191414; /* Dark background */
+            margin-bottom: 20px;
+        }
+        .message {
+            margin-bottom: 15px;
+        }
+        .message.user {
+            text-align: right;
+            color: #1DB954; /* Spotify green for user message */
+        }
+        .message.bot {
+            text-align: left;
+            color: #fff;
+        }
+        #input-container {
+            display: flex;
+            flex-direction: column;
+            background-color: #333;
+            border-radius: 10px;
+            padding: 10px;
+        }
+        #input-container input {
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            background-color: #222;
+            color: #fff;
+        }
+        #input-container button {
+            padding: 15px;
+            border: none;
+            background: #1DB954;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        #input-container button:hover {
+            background: #18a748;
+        }
+        select, #id-check-btn, #slot-connection-btn {
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ffcc00; /* Bright yellow for selection */
+            color: #000;
+            margin-bottom: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <h1>HOLOR2D2 - AI Chat</h1>
+
+        <!-- Dropdown for HIC options -->
+        <select id="hic-select">
+            <option value="">Select HIC Process</option>
+            <option value="process1">HIC - Process 1</option>
+            <option value="process2">HIC - Process 2</option>
+            <option value="process3">HIC - Process 3</option>
+        </select>
+
+        <!-- ID Check Button -->
+        <button id="id-check-btn" onclick="checkID()">ID Check</button>
+
+        <!-- Slot Connection Button -->
+        <button id="slot-connection-btn" onclick="connectSlot()">Connect to Slot</button>
+
+        <div id="messages"></div>
+        <div id="input-container">
+            <input type="text" id="user-input" placeholder="Type your message..." autocomplete="off">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script type="module" src="master.js"></script>
+    <script>
+        async function sendMessage() {
+            const userInput = document.getElementById('user-input').value.trim();
+            const hicSelection = document.getElementById('hic-select').value;
+            if (!userInput) return;
+
+            const messageContainer = document.getElementById('messages');
+            const userMessage = createMessageElement('user', userInput);
+            messageContainer.appendChild(userMessage);
+
+            try {
+                const botResponse = await getBotResponse(userInput, hicSelection);
+
+                const botMessage = createMessageElement('bot', botResponse);
+                messageContainer.appendChild(botMessage);
+            } catch (error) {
+                const botMessage = createMessageElement('bot', 'An error occurred while processing your request.');
+                messageContainer.appendChild(botMessage);
+            }
+
+            document.getElementById('user-input').value = '';
+            messageContainer.scrollTop = messageContainer.scrollHeight; // Auto-scroll to the latest message
+        }
+
+        async function getBotResponse(userInput, hicSelection) {
+            // Simulating HIC process selection and response
+            if (!hicSelection) {
+                return 'Please select a HIC process before sending a message.';
+            }
+            
+            // Mock HIC process
+            return `Processed by ${hicSelection}: ${userInput}`;
+        }
+
+        function checkID() {
+            alert("ID Check Initiated!");
+            // Implement ID check logic here
+        }
+
+        function connectSlot() {
+            alert("Slot connection established.");
+            // Implement slot connection logic here
+        }
+
+        function createMessageElement(sender, text) {
+            const message = document.createElement('div');
+            message.className = `message ${sender}`;
+            message.textContent = text;
+            return message;
+        }
+    </script>
+</body>
+</html>
