@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <link rel="icon" href="ICON.JPEG" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HOLOR2D2 Chat</title>
+    <title>R2D2 Chat</title>
     <style>
         body {
             font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -14,14 +14,14 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #121212; /* Dark Spotify-like theme */
+            background-color: #1a0d47; /* Dark purple background */
             color: #fff;
         }
         #chat-container {
             width: 90%;
             max-width: 700px;
             padding: 30px;
-            background: #1DB954; /* Spotify green */
+            background: #720e9e; /* Purple background for chat container */
             border-radius: 20px;
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
             display: flex;
@@ -31,28 +31,33 @@
         h1 {
             text-align: center;
             font-size: 2em;
-            color: #fff; /* Title color white */
+            color: #ffcc00; /* Yellow title */
             margin-bottom: 20px;
         }
         #messages {
             flex: 1;
             padding: 20px;
             overflow-y: auto;
-            border: 1px solid #333;
-            border-radius: 10px;
-            background-color: #191414; /* Dark background */
             margin-bottom: 20px;
+            border-radius: 10px;
+            background-color: #2a003f; /* Dark purple for messages */
         }
         .message {
             margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 80%;
         }
         .message.user {
             text-align: right;
-            color: #1DB954; /* Spotify green for user message */
+            background-color: #ffcc00; /* Yellow for user messages */
+            color: #000; /* Black text for user messages */
+            margin-left: auto;
         }
         .message.bot {
             text-align: left;
-            color: #fff;
+            background-color: #ff5722; /* Orange for bot messages */
+            color: #fff; /* White text for bot messages */
         }
         #input-container {
             display: flex;
@@ -72,21 +77,21 @@
         #input-container button {
             padding: 15px;
             border: none;
-            background: #1DB954;
-            color: #fff;
+            background: #ffcc00; /* Yellow for button */
+            color: #000;
             font-size: 16px;
             border-radius: 5px;
             cursor: pointer;
             transition: background 0.3s;
         }
         #input-container button:hover {
-            background: #18a748;
+            background: #e6b800; /* Darker yellow on hover */
         }
-        button#star-btn, button#id-check-btn, button#slot-connection-btn {
+        #star-btn {
             padding: 12px;
             border: none;
             border-radius: 5px;
-            background-color: #ffcc00; /* Bright yellow for selection */
+            background-color: #ffcc00; /* Bright yellow for the star button */
             color: #000;
             margin-bottom: 10px;
             cursor: pointer;
@@ -96,73 +101,43 @@
 </head>
 <body>
     <div id="chat-container">
-        <h1>HOLOR2D2 - AI Chat</h1>
+        <h1>R2D2 - AI Chat</h1>
 
         <!-- Single Action Button -->
-        <button id="star-btn" aria-label="Star action" onclick="starAction()">Star</button>
-
-        <!-- ID Check Button -->
-        <button id="id-check-btn" aria-label="ID Check" onclick="checkID()">ID Check</button>
-
-        <!-- Slot Connection Button -->
-        <button id="slot-connection-btn" aria-label="Connect to Slot" onclick="connectSlot()">Connect to Slot</button>
+        <button id="star-btn" onclick="startAction()">Start</button>
 
         <div id="messages"></div>
-        <div id="input-container">
-            <input type="text" id="user-input" placeholder="Type your message..." autocomplete="off">
-            <button id="send-button" onclick="sendMessage()">Send</button>
+        <div id="input-container" style="display:none;" id="input-container">
+            <input type="text" id="user-input" placeholder="Type your ID..." autocomplete="off">
+            <button onclick="processID()">Submit ID</button>
         </div>
     </div>
 
-    <script type="module" src="master.js"></script>
-    <script>
-        const userDatabase = {
-            // Mock subscribers with user IDs
-            'user123': true,
-            'user456': true,
-            'user789': false // Example of a non-subscriber
-        };
+    <script type="module">
+        async function startAction() {
+            document.getElementById('input-container').style.display = 'flex';
+            const messageContainer = document.getElementById('messages');
+            const botMessage = createMessageElement('bot', 'Please enter your ID:');
+            messageContainer.appendChild(botMessage);
+            messageContainer.scrollTop = messageContainer.scrollHeight; // Auto-scroll to the latest message
+        }
 
-        async function sendMessage() {
+        async function processID() {
             const userInput = document.getElementById('user-input').value.trim();
-            const userId = 'user123'; // Mock user ID for this example
             if (!userInput) return;
 
             const messageContainer = document.getElementById('messages');
             const userMessage = createMessageElement('user', userInput);
             messageContainer.appendChild(userMessage);
 
-            const botResponse = await getBotResponse(userInput, userId);
-            const botMessage = createMessageElement('bot', botResponse);
+            const botMessage = createMessageElement('bot', `ID ${userInput} received! You can now choose your cloud service: AWS, Azure, or Google Cloud.`);
             messageContainer.appendChild(botMessage);
-
-            document.getElementById('user-input').value = '';
-            messageContainer.scrollTop = messageContainer.scrollHeight; // Auto-scroll to the latest message
+            enableCloudOptions(messageContainer);
         }
 
-        async function getBotResponse(userInput, userId) {
-            return checkSubscription(userId)
-                ? `Welcome back, subscriber! You said: ${userInput}`
-                : `Hello! You are not a subscriber. You said: ${userInput}`;
-        }
-
-        function checkSubscription(userId) {
-            return userDatabase[userId] === true;
-        }
-
-        function starAction() {
-            alert("Star action performed!");
-            // Implement logic for starring the user or content
-        }
-
-        function checkID() {
-            alert("ID Check Initiated!");
-            // Implement ID check logic here
-        }
-
-        function connectSlot() {
-            alert("Slot connection established.");
-            // Implement slot connection logic here
+        function enableCloudOptions(messageContainer) {
+            const optionsMessage = createMessageElement('bot', 'Type "AWS", "Azure", or "Google Cloud" to connect via SSH.');
+            messageContainer.appendChild(optionsMessage);
         }
 
         function createMessageElement(sender, text) {
