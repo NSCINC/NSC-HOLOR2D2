@@ -1,0 +1,17 @@
+[
+    {
+        "id": "user123",
+        "name": "Lucas",
+        "isSubscriber": true
+    },
+    {
+        "id": "user456",
+        "name": "Ana",
+        "isSubscriber": true
+    },
+    {
+        "id": "user789",
+        "name": "Carlos",
+        "isSubscriber": false
+    }
+]
