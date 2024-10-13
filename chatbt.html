@@ -132,82 +132,102 @@
 
         <div id="messages"></div>
         <div id="input-container">
-            <input type="text" id="user-input" placeholder="Type your ID..." autocomplete="off">
-            <button onclick="processID()">Go</button>
+            <input type="text" id="user-input" placeholder="Type '!go' to start..." autocomplete="off">
+            <button onclick="processInput()">Go</button>
         </div>
         <button class="sign-in-button" onclick="redirectToPayment()">Sign In</button>
     </div>
 
     <script type="module">
-        async function processID() {
+        // Show the initial hello message when the page loads
+        window.onload = () => {
+            const messageContainer = document.getElementById('messages');
+            const helloMessage = createMessageElement('bot', "Hello! Type '!go' to start the configuration questionnaire.");
+            messageContainer.appendChild(helloMessage);
+            messageContainer.scrollTop = messageContainer.scrollHeight; // Auto-scroll to the latest message
+        };
+
+        async function processInput() {
             const userInput = document.getElementById('user-input').value.trim();
             if (!userInput) return; // Do not proceed if input is empty
 
             const messageContainer = document.getElementById('messages');
-            
+
             // Create user message
             const userMessage = createMessageElement('user', userInput);
             messageContainer.appendChild(userMessage);
 
-            // Create bot response message
-            const botMessage = createMessageElement('bot', `ID ${userInput} received!`);
-            messageContainer.appendChild(botMessage);
-
-            // Create a follow-up question
-            const questionMessage = createMessageElement('bot', `What configuration would you like to apply for ID ${userInput}?`);
-            messageContainer.appendChild(questionMessage);
-
-            // Show configuration options
-            showConfigurationOptions(messageContainer, userInput); // Pass the ID to show options
+            if (userInput.toLowerCase() === '!go') {
+                // Start the configuration questionnaire
+                startConfigurationQuestionnaire(messageContainer);
+            } else {
+                const botMessage = createMessageElement('bot', "Invalid input. Please type '!go' to start.");
+                messageContainer.appendChild(botMessage);
+            }
 
             // Clear the input field after sending the message
             document.getElementById('user-input').value = '';
-
             // Scroll to the latest message
             messageContainer.scrollTop = messageContainer.scrollHeight;
         }
 
-        function showConfigurationOptions(messageContainer, userId) {
-            const options = ['Configure AWS', 'Configure Azure', 'Configure Google Cloud'];
-            const optionsMessage = createMessageElement('bot', `Available configurations for ID ${userId}:`);
+        function startConfigurationQuestionnaire(messageContainer) {
+            const options = [
+                "1. HolorD2",
+                "2. HoloSSP MT Local Storeger",
+                "3. Connect All Processing Options"
+            ];
+            const optionsMessage = createMessageElement('bot', `Configuration options:\n${options.join('\n')}`);
             messageContainer.appendChild(optionsMessage);
 
-            options.forEach(option => {
-                const button = document.createElement('button');
-                button.className = 'option-button';
-                button.textContent = option;
-                button.onclick = () => handleOptionSelect(option, messageContainer, userId);
-                messageContainer.appendChild(button);
-            });
-            messageContainer.scrollTop = messageContainer.scrollHeight; // Auto-scroll to the latest message
+            const botResponse = createMessageElement('bot', "Please select an option by typing the number:");
+            messageContainer.appendChild(botResponse);
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+
+            // Create input for configuration option
+            const optionInput = document.createElement('input');
+            optionInput.type = 'text';
+            optionInput.placeholder = "Type the option number...";
+            optionInput.autocomplete = 'off';
+
+            const optionButton = document.createElement('button');
+            optionButton.textContent = "Submit";
+            optionButton.onclick = () => handleConfigurationOption(optionInput.value, messageContainer);
+
+            messageContainer.appendChild(optionInput);
+            messageContainer.appendChild(optionButton);
         }
 
-        function handleOptionSelect(option, messageContainer, userId) {
+        function handleConfigurationOption(option, messageContainer) {
             const userMessage = createMessageElement('user', option);
             messageContainer.appendChild(userMessage);
 
-            const botResponse = createMessageElement('bot', `You selected ${option} for ID ${userId}. Configuring...`);
+            const configOptions = {
+                '1': 'HolorD2 configuration in progress...',
+                '2': 'HoloSSP MT Local Soter configuration in progress...',
+                '3': 'All processing options are being connected...'
+            };
+
+            const botResponse = createMessageElement('bot', configOptions[option] || "Invalid option. Please try again.");
             messageContainer.appendChild(botResponse);
-            messageContainer.scrollTop = messageContainer.scrollHeight; // Auto-scroll to the latest message
-        }
+            messageContainer.scrollTop = messageContainer.scrollHeight;
 
-        function redirectToPayment() {
-            const messageContainer = document.getElementById('messages');
-            const botMessage = createMessageElement('bot', "Redirecting to the payment page...");
-            messageContainer.appendChild(botMessage);
-            messageContainer.scrollTop = messageContainer.scrollHeight; // Auto-scroll to the latest message
-
-            // Redirect to the payment page (change this URL to your actual payment page)
-            setTimeout(() => {
-                window.location.href = 'payment.html'; // Example payment page URL
-            }, 1000); // Delay to show the message
+            if (configOptions[option]) {
+                const startProcessingMessage = createMessageElement('bot', "Start processing...");
+                messageContainer.appendChild(startProcessingMessage);
+            }
         }
 
         function createMessageElement(sender, text) {
-            const message = document.createElement('div');
-            message.className = `message ${sender}`;
-            message.textContent = text;
-            return message;
+            const messageElement = document.createElement('div');
+            messageElement.className = `message ${sender}`;
+            messageElement.textContent = text;
+            return messageElement;
+        }
+
+        function redirectToPayment() {
+            // Logic to redirect to the payment page
+            alert("Redirecting to payment...");
         }
     </script>
 </body>
