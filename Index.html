@@ -65,6 +65,7 @@
             background-color: #333;
             border-radius: 10px;
             padding: 10px;
+            display: none; /* Initially hidden */
         }
         #input-container input {
             padding: 15px;
@@ -104,10 +105,10 @@
         <h1>R2D2 - AI Chat</h1>
 
         <!-- Single Action Button -->
-        <button id="star-btn" onclick="startAction()">Start</button>
+        <button id="star-btn" onclick="startAction()">Star</button>
 
         <div id="messages"></div>
-        <div id="input-container" style="display:none;" id="input-container">
+        <div id="input-container">
             <input type="text" id="user-input" placeholder="Type your ID..." autocomplete="off">
             <button onclick="processID()">Submit ID</button>
         </div>
