@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <link rel="icon" href="ICON.JPEG" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>R2D2 Chat</title>
+    <title>R2D2</title>
     <style>
         body {
             font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -175,8 +175,15 @@
         }
 
         function requestPayment() {
-            // Redirect to the payment page or implement payment logic here
-            alert("Redirecting to the payment page...");
+            const messageContainer = document.getElementById('messages');
+            const botMessage = createMessageElement('bot', "Redirecting to the payment page...");
+            messageContainer.appendChild(botMessage);
+            messageContainer.scrollTop = messageContainer.scrollHeight; // Auto-scroll to the latest message
+
+            // Redirect to the payment page (change this URL to your actual payment page)
+            setTimeout(() => {
+                window.location.href = 'payment.html'; // Example payment page URL
+            }, 1000); // Delay to show the message
         }
 
         function createMessageElement(sender, text) {
