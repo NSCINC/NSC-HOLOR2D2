@@ -68,12 +68,44 @@ Main: Finalizou todas as threads.
 ```
 
 ## Linguagens e Flags 💻
-### C 
-![C Logo](https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/C_Programming_Language.svg/1200px-C_Programming_Language.svg.png)  
+Aqui está uma versão melhorada do seu README, com os ícones das linguagens, seus compiladores e as respectivas flags. Além disso, incluí emojis para dar um toque visual.
+
+---
+
+# R2D2 🚀
+
+![C Logo](https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/C_Programming_Language.svg/1200px-C_Programming_Language.svg.png)
+
+## Linguagens Utilizadas
+
+### C
 - **Ícone**: ![C Icon](https://img.icons8.com/color/48/000000/c-programming.png)
 - **Compilador**: GCC
 - **Flags**: `-lpthread`  
   Essas flags permitem a vinculação da biblioteca de threads POSIX, necessária para utilizar funcionalidades de multithreading.
+
+### PHP
+- **Ícone**: ![PHP Icon](https://img.icons8.com/color/48/000000/php.png)
+- **Compilador**: PHP CLI
+- **Flags**: `-d display_errors=1`  
+  Esta flag ativa a exibição de erros durante a execução do script.
+
+### Java
+- **Ícone**: ![Java Icon](https://img.icons8.com/color/48/000000/java-coffee-cup-logo.png)
+- **Compilador**: javac
+- **Flags**: `-Xlint:unchecked`  
+  Esta flag ativa avisos sobre operações não verificadas.
+
+### JavaScript
+- **Ícone**: ![JavaScript Icon](https://img.icons8.com/color/48/000000/javascript.png)
+- **Compilador**: Node.js
+- **Flags**: `--experimental-modules`  
+  Esta flag habilita a utilização de módulos ECMAScript experimentais.
+
+## Licença
+
+Este projeto está licenciado sob a [Licença Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+
 
 ## Licença 📜
 Este projeto está licenciado sob a [Apache License 2.0](LICENSE).
