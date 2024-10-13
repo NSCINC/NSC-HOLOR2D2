@@ -27,6 +27,7 @@
             display: flex;
             flex-direction: column;
             height: 90vh;
+            overflow: hidden;
         }
         h1 {
             text-align: center;
@@ -41,71 +42,87 @@
             margin-bottom: 20px;
             border-radius: 10px;
             background-color: #2a003f; /* Dark purple for messages */
+            display: flex;
+            flex-direction: column;
         }
         .message {
             margin-bottom: 15px;
             padding: 10px;
             border-radius: 10px;
             max-width: 80%;
+            position: relative;
+            word-wrap: break-word;
         }
         .message.user {
             text-align: right;
-            background-color: #ffcc00; /* Yellow for user messages */
+            background-color: #d1f5d1; /* Light green for user messages */
             color: #000; /* Black text for user messages */
             margin-left: auto;
+            border-radius: 10px 10px 0 10px; /* Rounded corners on one side */
         }
         .message.bot {
             text-align: left;
-            background-color: #ff5722; /* Orange for bot messages */
-            color: #fff; /* White text for bot messages */
+            background-color: #ffcc00; /* Yellow for bot messages */
+            color: #000; /* Black text for bot messages */
+            border-radius: 10px 10px 10px 0; /* Rounded corners on one side */
         }
         #input-container {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             background-color: #333;
             border-radius: 10px;
             padding: 10px;
+            margin-top: auto; /* Move the input container to the bottom */
         }
         #input-container input {
             padding: 15px;
             border: none;
             border-radius: 5px;
-            margin-bottom: 10px;
+            margin-right: 10px;
             background-color: #222;
             color: #fff;
+            flex: 1;
+            min-width: 0; /* Prevent overflow */
         }
         #input-container button {
             padding: 15px;
             border: none;
-            background: #ffcc00; /* Yellow for button */
-            color: #000;
+            background: #00bcd4; /* Light teal for button */
+            color: #fff;
             font-size: 16px;
             border-radius: 5px;
             cursor: pointer;
             transition: background 0.3s;
+            flex-shrink: 0; /* Prevent button from shrinking */
         }
         #input-container button:hover {
-            background: #e6b800; /* Darker yellow on hover */
+            background: #0097a7; /* Darker teal on hover */
         }
-        .option-button {
-            padding: 10px;
-            margin: 5px 0;
+        .sign-in-button {
+            padding: 15px;
             border: none;
-            border-radius: 5px;
-            background-color: #ff5722; /* Orange for option buttons */
+            background: #4CAF50; /* Green for sign-in button */
             color: #fff;
+            font-size: 16px;
+            border-radius: 5px;
             cursor: pointer;
             transition: background 0.3s;
+            margin-top: 10px;
         }
-        .option-button:hover {
-            background-color: #e64a19; /* Darker orange on hover */
+        .sign-in-button:hover {
+            background: #388e3c; /* Darker green on hover */
         }
-        #payment-btn {
-            background-color: #4CAF50; /* Green for payment button */
-            margin-top: 20px;
-        }
-        #payment-btn:hover {
-            background-color: #45a049; /* Darker green on hover */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5em; /* Smaller title on mobile */
+            }
+            #input-container {
+                flex-direction: column; /* Stack input and button on small screens */
+                align-items: stretch;
+            }
+            #input-container button {
+                margin-top: 10px; /* Add space between input and button */
+            }
         }
     </style>
 </head>
@@ -113,26 +130,15 @@
     <div id="chat-container">
         <h1>R2D2 - AI Chat</h1>
 
-        <!-- Single Action Button -->
-        <button id="star-btn" onclick="startAction()">Start</button>
-
         <div id="messages"></div>
         <div id="input-container">
             <input type="text" id="user-input" placeholder="Type your ID..." autocomplete="off">
-            <button onclick="processID()">Submit ID</button>
+            <button onclick="processID()">Go</button>
         </div>
-        <button id="payment-btn" style="display: none;" onclick="redirectToPayment()">Go to Payment</button>
+        <button class="sign-in-button" onclick="requestPayment()">Sign In</button>
     </div>
 
     <script type="module">
-        async function startAction() {
-            document.getElementById('input-container').style.display = 'flex';
-            const messageContainer = document.getElementById('messages');
-            const botMessage = createMessageElement('bot', 'Please enter your ID:');
-            messageContainer.appendChild(botMessage);
-            messageContainer.scrollTop = messageContainer.scrollHeight; // Auto-scroll to the latest message
-        }
-
         async function processID() {
             const userInput = document.getElementById('user-input').value.trim();
             if (!userInput) return;
@@ -144,6 +150,7 @@
             const botMessage = createMessageElement('bot', `ID ${userInput} received! Choose your configuration for HoloHIC:`);
             messageContainer.appendChild(botMessage);
             showConfigurationOptions(messageContainer);
+            messageContainer.scrollTop = messageContainer.scrollHeight; // Auto-scroll to the latest message
         }
 
         function showConfigurationOptions(messageContainer) {
@@ -165,15 +172,11 @@
             const botResponse = createMessageElement('bot', `You selected ${option}. Configuring...`);
             messageContainer.appendChild(botResponse);
             messageContainer.scrollTop = messageContainer.scrollHeight; // Auto-scroll to the latest message
-
-            // Aqui você pode adicionar a lógica para realmente configurar o serviço selecionado
-
-            // Exibir botão de pagamento
-            document.getElementById('payment-btn').style.display = 'block';
         }
 
-        function redirectToPayment() {
-            window.location.href = 'payment.html'; // Redireciona para a página de pagamento
+        function requestPayment() {
+            // Redirect to the payment page or implement payment logic here
+            alert("Redirecting to the payment page...");
         }
 
         function createMessageElement(sender, text) {
