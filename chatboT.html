@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <link rel="icon" href="ICON.JPEG" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>R2D2</title>
+    <title>R2D2 Chat</title>
     <style>
         body {
             font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -147,29 +147,41 @@
             const userMessage = createMessageElement('user', userInput);
             messageContainer.appendChild(userMessage);
 
-            const botMessage = createMessageElement('bot', `ID ${userInput} received! Choose your configuration for HoloHIC:`);
+            const botMessage = createMessageElement('bot', `ID ${userInput} received! Here are your configuration instructions:`);
             messageContainer.appendChild(botMessage);
-            showConfigurationOptions(messageContainer);
+            
+            // Provide configuration instructions
+            const instructionsMessage = createMessageElement('bot', `
+                1. Please select the cloud configuration you wish to apply.
+                2. Click on the corresponding button below to proceed with your configuration.
+                3. After configuration, click 'Sign In' to proceed to payment.
+            `);
+            messageContainer.appendChild(instructionsMessage);
+
+            showConfigurationOptions(messageContainer, userInput); // Pass the ID to show options
             messageContainer.scrollTop = messageContainer.scrollHeight; // Auto-scroll to the latest message
         }
 
-        function showConfigurationOptions(messageContainer) {
+        function showConfigurationOptions(messageContainer, userId) {
             const options = ['Configure AWS', 'Configure Azure', 'Configure Google Cloud'];
+            const optionsMessage = createMessageElement('bot', `Available configurations for ID ${userId}:`);
+            messageContainer.appendChild(optionsMessage);
+
             options.forEach(option => {
                 const button = document.createElement('button');
                 button.className = 'option-button';
                 button.textContent = option;
-                button.onclick = () => handleOptionSelect(option, messageContainer);
+                button.onclick = () => handleOptionSelect(option, messageContainer, userId);
                 messageContainer.appendChild(button);
             });
             messageContainer.scrollTop = messageContainer.scrollHeight; // Auto-scroll to the latest message
         }
 
-        function handleOptionSelect(option, messageContainer) {
+        function handleOptionSelect(option, messageContainer, userId) {
             const userMessage = createMessageElement('user', option);
             messageContainer.appendChild(userMessage);
 
-            const botResponse = createMessageElement('bot', `You selected ${option}. Configuring...`);
+            const botResponse = createMessageElement('bot', `You selected ${option} for ID ${userId}. Configuring...`);
             messageContainer.appendChild(botResponse);
             messageContainer.scrollTop = messageContainer.scrollHeight; // Auto-scroll to the latest message
         }
