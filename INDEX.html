@@ -24,7 +24,6 @@
             background: #1DB954; /* Spotify green */
             border-radius: 20px;
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-            position: relative;
             display: flex;
             flex-direction: column;
             height: 90vh;
@@ -83,7 +82,7 @@
         #input-container button:hover {
             background: #18a748;
         }
-        select, #id-check-btn, #slot-connection-btn {
+        #star-btn, #id-check-btn, #slot-connection-btn {
             padding: 12px;
             border: none;
             border-radius: 5px;
@@ -99,13 +98,8 @@
     <div id="chat-container">
         <h1>HOLOR2D2 - AI Chat</h1>
 
-        <!-- Dropdown for HIC options -->
-        <select id="hic-select">
-            <option value="">Select HIC Process</option>
-            <option value="process1">HIC - Process 1</option>
-            <option value="process2">HIC - Process 2</option>
-            <option value="process3">HIC - Process 3</option>
-        </select>
+        <!-- Single Action Button -->
+        <button id="star-btn" onclick="starAction()">Star</button>
 
         <!-- ID Check Button -->
         <button id="id-check-btn" onclick="checkID()">ID Check</button>
@@ -122,9 +116,16 @@
 
     <script type="module" src="master.js"></script>
     <script>
+        const userDatabase = {
+            // Mock subscribers with user IDs
+            'user123': true,
+            'user456': true,
+            'user789': false // Example of a non-subscriber
+        };
+
         async function sendMessage() {
             const userInput = document.getElementById('user-input').value.trim();
-            const hicSelection = document.getElementById('hic-select').value;
+            const userId = 'user123'; // Mock user ID for this example
             if (!userInput) return;
 
             const messageContainer = document.getElementById('messages');
@@ -132,8 +133,7 @@
             messageContainer.appendChild(userMessage);
 
             try {
-                const botResponse = await getBotResponse(userInput, hicSelection);
-
+                const botResponse = await getBotResponse(userInput, userId);
                 const botMessage = createMessageElement('bot', botResponse);
                 messageContainer.appendChild(botMessage);
             } catch (error) {
@@ -145,14 +145,22 @@
             messageContainer.scrollTop = messageContainer.scrollHeight; // Auto-scroll to the latest message
         }
 
-        async function getBotResponse(userInput, hicSelection) {
-            // Simulating HIC process selection and response
-            if (!hicSelection) {
-                return 'Please select a HIC process before sending a message.';
+        async function getBotResponse(userInput, userId) {
+            if (checkSubscription(userId)) {
+                return `Welcome back, subscriber! You said: ${userInput}`;
+            } else {
+                return `Hello! You are not a subscriber. You said: ${userInput}`;
             }
-            
-            // Mock HIC process
-            return `Processed by ${hicSelection}: ${userInput}`;
+        }
+
+        function checkSubscription(userId) {
+            // Check if the user ID exists in the user database
+            return userDatabase[userId] === true;
+        }
+
+        function starAction() {
+            alert("Star action performed!");
+            // Implement logic for starring the user or content
         }
 
         function checkID() {
