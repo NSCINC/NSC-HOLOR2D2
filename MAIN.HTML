@@ -65,7 +65,6 @@
             background-color: #333;
             border-radius: 10px;
             padding: 10px;
-            display: none; /* Initially hidden */
         }
         #input-container input {
             padding: 15px;
@@ -101,6 +100,13 @@
         .option-button:hover {
             background-color: #e64a19; /* Darker orange on hover */
         }
+        #payment-btn {
+            background-color: #4CAF50; /* Green for payment button */
+            margin-top: 20px;
+        }
+        #payment-btn:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
     </style>
 </head>
 <body>
@@ -108,13 +114,14 @@
         <h1>R2D2 - AI Chat</h1>
 
         <!-- Single Action Button -->
-        <button id="star-btn" onclick="startAction()">Star</button>
+        <button id="star-btn" onclick="startAction()">Start</button>
 
         <div id="messages"></div>
         <div id="input-container">
             <input type="text" id="user-input" placeholder="Type your ID..." autocomplete="off">
             <button onclick="processID()">Submit ID</button>
         </div>
+        <button id="payment-btn" style="display: none;" onclick="redirectToPayment()">Go to Payment</button>
     </div>
 
     <script type="module">
@@ -159,7 +166,14 @@
             messageContainer.appendChild(botResponse);
             messageContainer.scrollTop = messageContainer.scrollHeight; // Auto-scroll to the latest message
 
-            // Here you can add the logic to actually configure the selected service
+            // Aqui você pode adicionar a lógica para realmente configurar o serviço selecionado
+
+            // Exibir botão de pagamento
+            document.getElementById('payment-btn').style.display = 'block';
+        }
+
+        function redirectToPayment() {
+            window.location.href = 'payment.html'; // Redireciona para a página de pagamento
         }
 
         function createMessageElement(sender, text) {
