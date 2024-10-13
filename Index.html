@@ -88,15 +88,18 @@
         #input-container button:hover {
             background: #e6b800; /* Darker yellow on hover */
         }
-        #star-btn {
-            padding: 12px;
+        .option-button {
+            padding: 10px;
+            margin: 5px 0;
             border: none;
             border-radius: 5px;
-            background-color: #ffcc00; /* Bright yellow for the star button */
-            color: #000;
-            margin-bottom: 10px;
+            background-color: #ff5722; /* Orange for option buttons */
+            color: #fff;
             cursor: pointer;
-            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .option-button:hover {
+            background-color: #e64a19; /* Darker orange on hover */
         }
     </style>
 </head>
@@ -131,14 +134,32 @@
             const userMessage = createMessageElement('user', userInput);
             messageContainer.appendChild(userMessage);
 
-            const botMessage = createMessageElement('bot', `ID ${userInput} received! You can now choose your cloud service: AWS, Azure, or Google Cloud.`);
+            const botMessage = createMessageElement('bot', `ID ${userInput} received! Choose your configuration for HoloHIC:`);
             messageContainer.appendChild(botMessage);
-            enableCloudOptions(messageContainer);
+            showConfigurationOptions(messageContainer);
         }
 
-        function enableCloudOptions(messageContainer) {
-            const optionsMessage = createMessageElement('bot', 'Type "AWS", "Azure", or "Google Cloud" to connect via SSH.');
-            messageContainer.appendChild(optionsMessage);
+        function showConfigurationOptions(messageContainer) {
+            const options = ['Configure AWS', 'Configure Azure', 'Configure Google Cloud'];
+            options.forEach(option => {
+                const button = document.createElement('button');
+                button.className = 'option-button';
+                button.textContent = option;
+                button.onclick = () => handleOptionSelect(option, messageContainer);
+                messageContainer.appendChild(button);
+            });
+            messageContainer.scrollTop = messageContainer.scrollHeight; // Auto-scroll to the latest message
+        }
+
+        function handleOptionSelect(option, messageContainer) {
+            const userMessage = createMessageElement('user', option);
+            messageContainer.appendChild(userMessage);
+
+            const botResponse = createMessageElement('bot', `You selected ${option}. Configuring...`);
+            messageContainer.appendChild(botResponse);
+            messageContainer.scrollTop = messageContainer.scrollHeight; // Auto-scroll to the latest message
+
+            // Here you can add the logic to actually configure the selected service
         }
 
         function createMessageElement(sender, text) {
